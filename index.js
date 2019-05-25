@@ -1,3 +1,5 @@
+module.exports = Phrase;
+
 //adds reverse fun to String
 String.prototype.reverse = function() {
     return Array.from(this).reverse().join(''); 
@@ -7,7 +9,7 @@ String.prototype.reverse = function() {
 
 String.prototype.blank = function() {
     // why didnt, this === ''; work? 
-    if (this.match(/\S+/)) {
+    if (this.match(/\S/)) {
         return false;
     }
     else {
@@ -19,31 +21,62 @@ Array.prototype.last = function() {
     return this.slice(-1);
 };
 
-function Phrase(content) {
+function Phrase(content = '') {
     this.content = content;
     this.test;
     this.const = 'constant';
     
+    //would have a throw exception here
+    // what about prototype though
+    if (typeof content !== "string") {
+        console.log("DUDE TYPE AS STRING");
+    }
     //first name matters not the one after funtion
     this.quiet = function quiet() {
-        return this.content.toLowerCase();
+        return this.content.toLowerCase();        /*if(typeof(strings) === "string") {
+        return strings.toLowerCase();
+        }
+        else {
+            console.log(this.content);
+        }*/
     };
     
     //
-    this.palindrome = function palindrome( sens = true) {
-    if (sens) {
-        return this.quiet() === this.quiet().reverse();
-    }
-    else {
-    return content === this.content.reverse();
-    }
-};
+    this.palindrome = function palindrome( sens = true, punc = false) {
+        //ugly cause of options. look up case switch
+        let judge = this.content;
+        if (punc) {
+            judge = this.letters();
+        }
+        if (sens) {
+            return Phrase.quiet(judge) === Phrase.quiet(judge).reverse();
+        }
+        else {
+            return judge === judge.reverse();
+        }
+    };
 
     //works without this
     this.louder = function louder() {
         return this.content.toUpperCase();
     };
+    
+    //
+    this.letters = function letters() {
+        return this.content.split(/\W+|\s+|_+|\d+/g).join("");
+    };
 }
+
+Phrase.quiet = function (strings) {
+        if(typeof(strings) === "string") {
+            return strings.toLowerCase();
+        }
+        else {
+            console.log(`${typeof this.content} not valid`);
+        }
+};
+
+console.log(Phrase.quiet('sSDSFSD'));
 
 //doesnt work with case sensitive
 function TranslatedPhrase(content, translation) {
@@ -66,14 +99,13 @@ function TranslatedPhrase(content, translation) {
             this.mode = true;
         }
     };
+    //overriding parent quiet function
     //this.quiet = function quiet() {
     //    return this.translation.toLowerCase();
     //};
 }
 
 TranslatedPhrase.prototype = new Phrase();
-
-console.log((new Phrase('Bab bab')).palindrome(false));
 
 function emailMaker(username, domain = "example") {
     return `${username.toLowerCase()}@${domain.toLowerCase()}.com`;
