@@ -43,17 +43,31 @@ function Phrase(content = '') {
     
     //
     this.palindrome = function palindrome( sens = true, punc = false) {
-        //ugly cause of options. look up case switch
+        //ugly cause of options. look up case switch might be better though
+        if(this.content.blank()) {return false}
         let judge = this.content;
         if (punc) {
             judge = this.letters();
         }
         if (sens) {
-            return Phrase.quiet(judge) === Phrase.quiet(judge).reverse();
+            judge = Phrase.quiet(judge);
         }
-        else {
-            return judge === judge.reverse();
-        }
+        return judge === judge.reverse();
+        
+        /*let judge = this.content;
+        switch (true) {
+            case(sens && punc):
+                judge = Phrase.quiet(this.letters());
+                return judge === judge.reverse();
+            case(sens):
+                judge = Phrase.quiet(judge);
+                return judge === judge.reverse();
+            case(punc):
+                judge = this.letters();
+                return judge === judge.reverse();
+            default:
+                return judge === judge.reverse();
+        }*/
     };
 
     //works without this
@@ -76,7 +90,8 @@ Phrase.quiet = function (strings) {
         }
 };
 
-console.log(Phrase.quiet('sSDSFSD'));
+//Debugging
+//console.log(Phrase.quiet('sSDSFSD'));
 
 //doesnt work with case sensitive
 function TranslatedPhrase(content, translation) {

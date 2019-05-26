@@ -32,6 +32,16 @@ describe("Phrase", function() {
             assert(punctuation.palindrome(undefined,true));
         });
         
+        it("for palindrome with punctuation and case sense invalid", function(){
+            let punctuationCase = new Phrase("Mad-am, I’m Adam.");
+            assert(!punctuationCase.palindrome(false,true));
+        });
+        
+        it("should return not for blank", function() {
+            let blank = new Phrase("")
+            assert(!blank.palindrome());
+        });
+        
         describe("#letters", function() {
             it("should ignore punctution", function() {
                 assert.strictEqual( new Phrase("Mad-am, I’m Adam.").letters(), "MadamImAdam");
